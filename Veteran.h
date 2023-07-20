@@ -1,24 +1,25 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <string>
+const int LEN = 32;
 using namespace std;
 
 class Veteran
 {
-	string name;
+	char name[LEN];
 	int age;
-	string military_service;
-	string contact_information;
-	string password;
-	
+	char military_service[LEN];
+	char contact_information[LEN];
+	char password[LEN];
+	char support_type[LEN]="";
 public:
-	Veteran();
-	void RegisterVeteran();
-	//bool LoginVeteran(const std::vector<Veteran*>&);
+	Veteran() = default;
+	void SetVeteran();
+	void RegistVeteran();
+	bool LoginVeteran();
+	void EditInformation();
+	void Account();
 	void Show();
-	string GetName();
-	string GetPassword();
+	char* GetName();
+	void SetSuppType();
 };
-

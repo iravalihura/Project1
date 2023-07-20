@@ -1,84 +1,71 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <fstream>
-#include "File.h"
 #include "Veteran.h"
 #include "Administrator.h"
 using namespace std;
 
-bool LoginVeteran(const vector<Veteran*> veterans)
-{
-    string name, password;
-    
-    cout << "Ââåäiòü ïàðîëü: ";
-    cin.ignore();
-    getline(cin, password);
-    cout << "Ââåäiòü iì'ÿ: ";
-    cin.ignore();
-    getline(cin, name);
-
-    for (const auto& veteran : veterans) {
-        if (veteran->GetName() == name && veteran->GetPassword() == password) {
-            cout << "Âõiä óñïiøíèé!\n";
-            return true;
-        }
+void Show() {
+    Veteran v;
+    fstream file;
+    file.open("RegistrInform.txt", ios::in | ios::binary);
+    if (!file)
+    {
+        cerr << "ÃÃ®Ã¬Ã¨Ã«ÃªÃ  Ã¢Â³Ã¤ÃªÃ°Ã¨Ã²Ã²Ã¿ Ã´Ã Ã©Ã«Ã³!" << endl;
+        exit(1);
     }
-    return false;
+    while (file.read((char*)&(v), sizeof(Veteran)))
+    {
+        v.Show();
+    }
+    file.close();
 }
 int main() {
-    setlocale(LC_ALL,"UKR");
-    File file;
-    vector< Veteran*> veterans;
-	int choice;
+    setlocale(LC_ALL, "UKR");
+    Veteran veteran;
+    Administrator admin;
+    int choice;
     do {
         system("cls");
-        cout << "Ãîëîâíå ìåíþ:\n";
-        cout << "1. Çàðåºñòðóâàòèñü\n";
-        cout << "2. Óâiéòè ÿê âåòåðàí\n";
-        cout << "3. Óâiéòè ÿê àäìiíiñòðàòîð\n";
-        cout << "4. Âèéòè\n";
-        cout << "Âàø âèáið: ";
+        cout << "Ð“Ð¾Ð»Ð¾Ð²Ð½Ðµ Ð¼ÐµÐ½ÑŽ:\n";
+        cout << "1. Ð—Ð°Ñ€ÐµÑ”ÑÑ‚Ñ€ÑƒÐ²Ð°Ñ‚Ð¸ÑÑŒ\n";
+        cout << "2. Ð£Ð²iÐ¹Ñ‚Ð¸ ÑÐº Ð²ÐµÑ‚ÐµÑ€Ð°Ð½\n";
+        cout << "3. Ð£Ð²iÐ¹Ñ‚Ð¸ ÑÐº Ð°Ð´Ð¼iÐ½iÑÑ‚Ñ€Ð°Ñ‚Ð¾Ñ€\n";
+        cout << "4. Ð’Ð¸Ð¹Ñ‚Ð¸\n";
+        cout << "Ð’Ð°Ñˆ Ð²Ð¸Ð±iÑ€: ";
         cin >> choice;
         switch (choice) {
         case 1: {
             system("cls");
-            Veteran* newVeteran = new Veteran();
-            newVeteran->RegisterVeteran();
-            veterans.push_back(newVeteran);
-            ofstream fout;
-            fout.open("RegistrInfor.dat", ios::out | ios::binary);
-            if (!fout)
-            {
-                cerr << "Ïîìèëêà âiäêðèòòÿ ôàéëó!" << endl;
-                exit(1);
-            }
-            fout.write((char*)&newVeteran, sizeof(Veteran));
+            veteran.RegistVeteran();
             system("pause");
         }
-            break;
+              break;
         case 2:
             system("cls");
-            if (LoginVeteran(veterans))
-                ;
+            if (veteran.LoginVeteran())
+                veteran.Account();
             else
-                cout << "Îáëiêîâîãî çàïèñó íå çíàéäåíî.\n\n";
+                cout << "ÐžÐ±Ð»iÐºÐ¾Ð²Ð¾Ð³Ð¾ Ð·Ð°Ð¿Ð¸ÑÑƒ Ð½Ðµ Ð·Ð½Ð°Ð¹Ð´ÐµÐ½Ð¾.\n\n";
             system("pause");
             break;
         case 3:
             system("cls");
+            admin.LoginAdmin();
             system("pause");
             break;
         case 4:
             return 0;
             break;
+        case 5:
+            system("cls");
+            Show();
+            system("pause");
+            break;
         default:
-            std::cout << "Íåâ³ðíèé âèá³ð. Ñïðîáóéòå ùå ðàç.\n";
+            cout << "ÐÐµÐ²Ñ–Ñ€Ð½Ð¸Ð¹ Ð²Ð¸Ð±Ñ–Ñ€. Ð¡Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ Ñ‰Ðµ Ñ€Ð°Ð·.\n";
             break;
         }
-    } while (choice != '4');
+    } while (true);
 
-    for (const auto& veteran : veterans) {
-        delete veteran;
-    }
-    veterans.clear();
-	return 0;
+    return 0;
 }

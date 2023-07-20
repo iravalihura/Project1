@@ -1,16 +1,17 @@
 #pragma once
 #include <iostream>
-#include <vector>
-
+#include "Veteran.h"
 using namespace std;
 
 class Administrator
 {
-	string username;
-	string password;
+	char password[LEN] = "admin";
 
 public:
-	Administrator();
-	Administrator(string, string);
+	Administrator() = default;
+	void LoginAdmin();
+	void Account();
+	void AddVeteran();
+	void UpdateVeteran();
+	void MarkVeteransWithSupport();
 };
-
