@@ -109,20 +109,20 @@ void Veteran::EditInformation()
 		exit(1);
 	}
 	bool found = false;
-	while (file.read((char*)&(v), sizeof(Veteran)))
+	while (file.read((char*)&v, sizeof(Veteran)))
 	{
-		if (strcmp(password , v.password)==0)
-
-			file.seekp(-static_cast<int>(sizeof(Veteran)), ios::cur);
-		file.write((char*)&(*this), sizeof(Veteran));
-		if (file.fail())
+		if (strcmp(password, v.password) == 0)
 		{
-			cerr << "Помилка запису до файлу!" << endl;
-			exit(1);
+			file.seekp(-static_cast<int>(sizeof(Veteran)), ios::cur);
+			file.write((char*)&(*this), sizeof(Veteran));
+			if (file.fail())
+			{
+				cerr << "Помилка запису до файлу!" << endl;
+				exit(1);
+			}
+			found = true;
+			break;
 		}
-		found = true;
-		break;
-
 	}
 	if (found)
 	{
