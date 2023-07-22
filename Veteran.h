@@ -1,7 +1,7 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include <fstream>
-const int LEN = 32;
+#include "Resource.h"
 using namespace std;
 
 class Veteran
@@ -11,15 +11,17 @@ class Veteran
 	char military_service[LEN];
 	char contact_information[LEN];
 	char password[LEN];
-	char support_type[LEN]="";
+	char support_type[LEN] = "";
 public:
 	Veteran() = default;
 	void SetVeteran();
 	void RegistVeteran();
 	bool LoginVeteran();
 	void EditInformation();
-	void Account();
+	void Account(vector<Resource*>&);
 	void Show();
+	void FindResource(vector<Resource*>&);
+	void LeaveReview(vector<Resource*>&);
 	char* GetName();
 	void SetSuppType();
 };

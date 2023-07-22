@@ -5,12 +5,8 @@ void Veteran::SetVeteran()
 	cout << "Введiть пароль: ";
 	cin.ignore();
 	cin.getline(password, LEN);
-
-
 	cout << "Введiть iм'я: ";
 	cin.getline(name, LEN);
-
-
 	cout << "Введiть вiк: ";
 	while (!(cin >> age))
 	{
@@ -22,12 +18,8 @@ void Veteran::SetVeteran()
 
 	cout << "Введiть iнформацiю про вiйськову службу: ";
 	cin.getline(military_service, LEN);
-
-
 	cout << "Введiть контактну iнформацiю: ";
 	cin.getline(contact_information, LEN);
-
-
 	cout << endl;
 }
 
@@ -60,7 +52,7 @@ bool Veteran::LoginVeteran()
 	file.open("RegistrInform.txt", ios::in | ios::binary);
 	if (!file)
 	{
-		cerr << "Помилка відкриття файлу!" << endl;
+		cerr << "Помилка вiдкриття файлу!" << endl;
 		exit(1);
 	}
 	bool found = false;
@@ -135,7 +127,7 @@ void Veteran::EditInformation()
 	file.close();
 }
 
-void Veteran::Account()
+void Veteran::Account(vector<Resource*>&v)
 {
 	int choice;
 	do {
@@ -143,7 +135,9 @@ void Veteran::Account()
 		cout << "Облiковий запис користувача: " << name << endl;
 		cout << "1. Переглянути iнформацiю профiлю" << endl;
 		cout << "2. Оновити iнформацiю" << endl;
-		cout << "3. Назад" << endl;
+		cout << "3. Знайти ресурс" << endl;
+		cout << "4. Залишити вiдгук про ресурс" << endl;
+		cout << "5. Назад" << endl;
 		cin >> choice;
 		switch (choice)
 		{
@@ -175,6 +169,16 @@ void Veteran::Account()
 			system("pause");
 			break;
 		case 3:
+			system("cls");
+			FindResource(v);
+			system("pause");
+			break;
+		case 4:
+			system("cls");
+			LeaveReview(v);
+			system("pause");
+			break;
+		case 5:
 			return;
 		default:
 			cout << "Невірний вибір. Спробуйте ще раз.\n";
@@ -190,6 +194,65 @@ void Veteran::Show()
 	cout << "Iнформацiя про вiйськову службу: " << military_service << endl;
 	cout << "Контактна iнформацiя: " << contact_information << endl;
 	cout << "Тип пiдтримки: " << support_type << endl;
+}
+
+void Veteran::FindResource(vector<Resource*>& resources)
+{
+	char category[LEN], location[LEN], type_support[LEN];
+	cout << "Категорiя: ";
+	cin.ignore();
+	cin.getline(category, LEN);
+	cout << "Локацiя: ";
+	cin.getline(location, LEN);
+	cout << "Вид пiдтримки: ";
+	cin.getline(type_support, LEN);
+	bool flag = false;
+	cout << endl << "Ресурси: " << endl;
+	for (const auto& resource : resources)
+	{
+		if (strcmp(resource->GetCategory(), category) == 0 &&
+			strcmp(resource->GetLocation(), location) == 0 &&
+			strcmp(resource->GetTypeSupport(), type_support) == 0)
+		{
+			cout << *resource << endl;
+			flag = true;
+		}
+	}
+	if (!flag)
+		cout << "Ресурсiв не знайдено!"<<endl;
+
+	/*if (flag)
+	{
+		cout << "Залишити вiдгук про ресурс?(1-так, 0-ні)" << endl;
+		int choice;
+		cin >> choice;
+		if (choice == 1)
+		{
+
+			cout<<
+		}
+		else return;
+	}*/
+}
+
+void Veteran::LeaveReview(vector<Resource*>& resources)
+{
+	char name[LEN];
+	cout << "Введiть назву ресурсу: ";
+	cin.ignore();
+	cin.getline(name, LEN);
+
+	bool flag = false;
+	for (const auto& resource : resources)
+	{
+		if (strcmp(resource->GetName(),name)==0)
+		{
+			resource->SetReview();
+			flag = true;
+		}
+	}
+	if (!flag)
+		cout << "Ресурсiв не знайдено!" << endl;
 }
 
 char* Veteran::GetName()

@@ -1,6 +1,6 @@
 ﻿#include "Administrator.h"
 
-void Administrator::LoginAdmin()
+void Administrator::LoginAdmin(vector<Resource*>& resources)
 {
 	char password[LEN];
 	cout << "Пароль: ";
@@ -9,10 +9,10 @@ void Administrator::LoginAdmin()
 	if (strcmp(this->password,password)!=0)
 		cout << "Не вiрний пароль!" << endl;
 	else
-		Account();
+		Account(resources);
 }
 
-void Administrator::Account()
+void Administrator::Account(vector<Resource*>& resources)
 {
 	int choice;
 	do {
@@ -20,7 +20,12 @@ void Administrator::Account()
 		cout << "1. Додати нового ветерана" << endl;
 		cout << "2. Оновити iнформацiю про ветерана" << endl;
 		cout << "3. Позначити ветерана, який отримує певний тип пiдтримки" << endl;
-		cout << "4. Назад" << endl;
+		cout << "4. Переглянути всi записи" << endl;
+		cout << "5. Додати ресурс" << endl;
+		cout << "6. Оновити iнформацiю про ресурс" << endl;
+		cout << "7. Переглянути всi ресурси" << endl;
+		cout << "8. Назад" << endl;
+		cout << "Ваш вибiр: ";
 		cin >> choice;
 		switch (choice)
 		{
@@ -42,6 +47,27 @@ void Administrator::Account()
 			system("pause");
 			break;
 		case 4:
+			system("cls");
+			ShowVeterans();
+			system("pause");
+			break;
+		case 5:
+			system("cls");
+			AddResources(resources);
+			system("pause");
+
+			break;
+		case 6:
+			system("cls");
+			UpdateResource(resources);
+			system("pause");
+			break;
+		case 7:
+			system("cls");
+			ShowResources(resources);
+			system("pause");
+			break;
+		case 8:
 			return;
 		default:
 			cout << "Невірний вибір. Спробуйте ще раз.\n";
@@ -91,7 +117,7 @@ void Administrator::UpdateVeteran()
 		if (strcmp(veteran.GetName() , name)==0)
 		{
 			found = true;
-			veteran.EditInformation();
+			veteran.EditInformation(); 
 			file.seekp(-static_cast<int>(sizeof(Veteran)), ios::cur);
 			file.write((char*)&veteran, sizeof(Veteran));
 			break;
@@ -153,4 +179,59 @@ void Administrator::MarkVeteransWithSupport()
 		cout << "Облiковий запис не знайдено." << endl;
 	}
 	file.close();
+}
+
+void Administrator::ShowVeterans()
+{
+	Veteran v;
+	fstream file;
+	file.open("RegistrInform.txt", ios::in | ios::binary);
+	if (!file)
+	{
+		cerr << "Помилка відкриття файлу!" << endl;
+		exit(1);
+	}
+	while (file.read((char*)&(v), sizeof(Veteran)))
+	{
+		v.Show();
+	}
+	file.close();
+}
+
+void Administrator::AddResources(vector<Resource*>& resources)
+{
+	Resource* resourse = new Resource;
+	resourse->SetResource();
+	resources.push_back(resourse);
+}
+
+void Administrator::ShowResources(vector<Resource*>& resources)
+{
+	if (resources.empty()) {
+		cout << "Немає доступних ресурсiв." << endl;
+		return;
+	}
+	for (auto& resource : resources)
+	{
+		cout << *resource;
+	}
+}
+
+void Administrator::UpdateResource(vector<Resource*>& resources)
+{
+	char name[LEN];
+	cout << "Назва шуканого ресурсу: ";
+	cin.ignore();
+	cin.getline(name,LEN);
+
+	if (resources.empty()) {
+		cout << "Немає доступних ресурсiв." << endl;
+		return;
+	}
+
+	for (auto& resource : resources)
+	{
+		if (strcmp(resource->GetName(), name) == 0)
+			resource->SetResource();
+	}
 }

@@ -9,7 +9,6 @@ int main() {
     system("color F0");
     Veteran veteran;
     Administrator admin;
-    vector<Resource*> resources;
     int choice;
     do {
         system("cls");
@@ -30,14 +29,14 @@ int main() {
         case 2:
             system("cls");
             if (veteran.LoginVeteran())
-                veteran.Account(resources);
+                veteran.Account();
             else
                 cout << "Облiкового запису не знайдено.\n\n";
             system("pause");
             break;
         case 3:
             system("cls");
-            admin.LoginAdmin(resources);
+            admin.LoginAdmin();
             system("pause");
             break;
         case 4:
@@ -48,9 +47,6 @@ int main() {
             break;
         }
     } while (true);
-    for (auto resource : resources) {
-        delete resource;
-    }
-    resources.clear();
+
     return 0;
 }
